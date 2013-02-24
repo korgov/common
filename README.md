@@ -1,5 +1,5 @@
 common
 ======
-My own somple lib with useful utils.
+My own simple lib with useful utils.
 
 
