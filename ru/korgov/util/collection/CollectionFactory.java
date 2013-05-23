@@ -15,6 +15,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Author: Kirill Korgov (kirill@korgov.ru)
@@ -105,5 +106,9 @@ public class CollectionFactory {
 
     public static <K, V> Map<K, V> emptyM() {
         return Collections.emptyMap();
+    }
+
+    public static <K, V> ConcurrentHashMap<K, V> newConcurrentHashMap() {
+        return new ConcurrentHashMap<K, V>();
     }
 }
