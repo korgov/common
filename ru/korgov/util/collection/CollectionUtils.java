@@ -7,15 +7,7 @@ import ru.korgov.util.alias.Cf;
 import ru.korgov.util.alias.Fus;
 import ru.korgov.util.func.Function;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Author: Kirill Korgov (kirill@korgov.ru)
@@ -147,12 +139,12 @@ public class CollectionUtils {
         return out;
     }
 
-    public static <F, T> List<T> map(final Iterable<F> src, final Function<F, T> fu) {
-        final List<T> out = Cf.newList();
-        for (final F v : src) {
-            out.add(fu.apply(v));
-        }
-        return out;
+    public static <F, T> List<T> map(final Iterable<? extends F> src, final Function<F, T> fu) {
+        return fu.map(src);
+    }
+
+    public static <F, T> List<T> map(final Function<F, T> fu, final Iterable<? extends F> src) {
+        return fu.map(src);
     }
 
 
@@ -160,6 +152,15 @@ public class CollectionUtils {
         final Map<K, V> out = Cf.newMap();
         for (final T t : src) {
             out.put(k.apply(t), v.apply(t));
+        }
+        return out;
+    }
+
+
+    public static <T, K, V> Map<K, List<V>> multiMapFromIterable(final Function<T, K> k, final Function<T, V> v, final Iterable<T> src) {
+        final Map<K, List<V>> out = Cf.newMap();
+        for (final T t : src) {
+            appendToMultiMap(out, k.apply(t), v.apply(t));
         }
         return out;
     }
@@ -209,6 +210,60 @@ public class CollectionUtils {
             public void remove() {
             }
         };
+    }
+
+    public static <T> Pair<List<T>, List<T>> split(Iterable<? extends T> ts, Filter<T> f){
+        final List<T> fits = Cf.newList();
+        final List<T> notFits = Cf.newList();
+        for (final T t : ts) {
+            if(f.fits(t)){
+                fits.add(t);
+            } else {
+                notFits.add(t);
+            }
+        }
+        return Cf.pair(fits, notFits);
+    }
+
+    public static <T> List<List<T>> split(Iterable<? extends T> ts, int chunkSize) {
+        final List<List<T>> out = Cf.newList();
+        final Iterator<? extends T> iterator = ts.iterator();
+        while (iterator.hasNext()) {
+            final List<T> chunk = Cf.newList(chunkSize);
+            for (int i = 0; i < chunkSize && iterator.hasNext(); ++i) {
+                chunk.add(iterator.next());
+            }
+            out.add(chunk);
+        }
+        return out;
+    }
+
+    public static <T> T maxBy(final Iterable<T> src, final Comparator<T> cmp, final T defaultValue) {
+        final Iterator<T> it = src.iterator();
+        if (it.hasNext()) {
+            T max = it.next();
+            while (it.hasNext()) {
+                final T some = it.next();
+                if (cmp.compare(max, some) < 0) {
+                    max = some;
+                }
+            }
+            return max;
+        }
+        return defaultValue;
+    }
+
+    public static <T extends Comparable<T>> T maxBy(final Iterable<T> src, final T defaultValue) {
+        return maxBy(src, new Comparator<T>() {
+            @Override
+            public int compare(T o1, T o2) {
+                return o1.compareTo(o2);
+            }
+        }, defaultValue);
+    }
+
+    public static boolean isEmpty(final Collection<?> c) {
+        return c == null || c.isEmpty();
     }
 
 }

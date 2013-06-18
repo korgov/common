@@ -34,7 +34,18 @@ public class IOUtils {
     }
 
     public static String read(final InputStream inputStream) throws IOException {
-        return read(new BufferedReader(new InputStreamReader(inputStream)), true);
+        return read(new BufferedReader(new InputStreamReader(inputStream, "UTF-8")), true);
+    }
+
+    public static byte[] readBytes(final InputStream is) throws IOException {
+        final ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        int nRead;
+        final byte[] data = new byte[16384];
+        while ((nRead = is.read(data, 0, data.length)) != -1) {
+            buffer.write(data, 0, nRead);
+        }
+        buffer.flush();
+        return buffer.toByteArray();
     }
 
     public static String read(final BufferedReader bufferedReader, final boolean closeAfterRead) throws IOException {

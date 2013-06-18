@@ -1,6 +1,6 @@
 package ru.korgov.util.func;
 
-import ru.korgov.util.alias.Cu;
+import ru.korgov.util.alias.Cf;
 
 import java.util.List;
 
@@ -20,7 +20,11 @@ public abstract class Function<F, T> {
         };
     }
 
-    public List<T> map(final Iterable<F> iterable){
-        return Cu.map(iterable, this);
+    public List<T> map(final Iterable<? extends F> src) {
+        final List<T> out = Cf.newList();
+        for (final F v : src) {
+            out.add(apply(v));
+        }
+        return out;
     }
 }

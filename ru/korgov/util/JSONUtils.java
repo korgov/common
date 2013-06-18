@@ -4,14 +4,11 @@ import org.jetbrains.annotations.Nullable;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import ru.korgov.util.alias.Cu;
 import ru.korgov.util.collection.CollectionUtils;
+import ru.korgov.util.collection.Pair;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Author: Kirill Korgov (kirill@korgov.ru)
@@ -107,5 +104,9 @@ public class JSONUtils {
             out.add(it.next().toString());
         }
         return out;
+    }
+
+    public static JSONObject zip(final Pair<String, ?>... items) {
+        return new JSONObject(Cu.zipMap(items));
     }
 }

@@ -53,6 +53,10 @@ public class CollectionFactory {
         return new ArrayList<T>(c);
     }
 
+    public static <T> List<T> newList(final int capacity) {
+        return new ArrayList<T>(capacity);
+    }
+
     @SuppressWarnings({"rawtypes", "unchecked"})
     public static <T> List<T> newList(final Collection c, final Class<T> clazz) {
         return new ArrayList<T>(c);
