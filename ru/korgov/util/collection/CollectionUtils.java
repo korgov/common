@@ -139,6 +139,7 @@ public class CollectionUtils {
         return out;
     }
 
+
     public static <T> Set<T> union(final Iterable<? extends Collection<T>> colls) {
         final Set<T> out = Cf.newSet();
         for (final Collection<T> coll : colls) {
