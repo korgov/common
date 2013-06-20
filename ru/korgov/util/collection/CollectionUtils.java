@@ -139,6 +139,14 @@ public class CollectionUtils {
         return out;
     }
 
+    public static <T> Set<T> union(final Iterable<? extends Collection<T>> colls) {
+        final Set<T> out = Cf.newSet();
+        for (final Collection<T> coll : colls) {
+            out.addAll(coll);
+        }
+        return out;
+    }
+
     public static <F, T> List<T> map(final Iterable<? extends F> src, final Function<F, T> fu) {
         return fu.map(src);
     }
